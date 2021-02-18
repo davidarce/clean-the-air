@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  clean-the-air:
+    image: clean-the-air
+    container_name: clean-the-air
+    build:
+      context: .
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/health"]
+      timeout: 10s
+      retries: 5
+      interval: 1s
+    ports: 
+      - 80:8081

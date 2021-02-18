@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -10,17 +13,48 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.21.1",
+    "chart.js": "^2.9.4",
+    "cors": "^2.8.5",
+    "express": "^4.15.4",
+    "express-healthcheck": "0.1.0",
+    "helmet": "^3.21.2",
+    "http-status": "^1.4.2",
+    "luxon": "^1.25.0",
+    "morgan": "^1.10.0",
+    "newrelic": "^7.1.1",
+    "npm-run-all": "^4.1.5",
     "react": "^17.0.1",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.1",
+    "react-query": "^3.9.8",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "sqlite3": "^5.0.2",
+    "styled-components": "^5.1.1",
+    "typeorm": "0.2.30",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "npm run server",
+    "start:watch": "npm-run-all --parallel client:start server:start:watch",
+    "build": "npm-run-all clean client:build server:build",
+    "clean": "rimraf ./build && rimraf ./dist",
+    "test": "npm-run-all --parallel client:test server:test",
+    "client:start": "react-scripts start",
+    "client:build": "react-scripts build && rm -rf docs && mv build dist",
+    "client:test": "react-scripts test",
+    "client:eject": "react-scripts eject",
+    "server:start:watch": "TS_NODE_PROJECT=./server/tsconfig.json nodemon ./server/src/index.ts",
+    "server:start": "npm run server:start:prod",
+    "server:build": "npm-run-all server:clean server:transpile",
+    "server:start:prod": "NODE_ENV=production npm-run-all server:build server",
+    "server": "node -r newrelic ./build/index.js",
+    "server:transpile": "tsc -p ./server/tsconfig.json",
+    "server:clean": "rimraf ./build",
+    "server:test": "jest",
+    "server:migration:run": "ts-node ./node_modules/typeorm/cli.js migration:run"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +73,15 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/luxon": "^1.26.0",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/styled-components": "^5.1.2",
+    "@types/body-parser": "^1.19.0",
+    "@types/cors": "^2.8.6",
+    "@types/helmet": "0.0.45",
+    "nodemon": "^2.0.6",
+    "ts-node": "^9.0.0"
   }
 }
